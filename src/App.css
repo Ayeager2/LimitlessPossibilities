@@ -66,6 +66,15 @@ body {
   overflow-y: auto;
 }
 
+.columnSmScreen {
+  background-color: var(--column-background-color);
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--column-border-color);
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
 .column3 {
   display: none;
   /* Hide the third column by default */
@@ -198,4 +207,78 @@ body {
 .settings-button.light-mode {
   background-color: var(--column-background-color);
   color: var(--text-color);
+}
+
+.column-two-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.column-two-container.visible {
+  transform: translateX(0);
+}
+
+.toggle-column-two-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .toggle-column-two-btn {
+    display: block;
+  }
+
+  .column-two-container {
+    display: none;
+  }
+
+  .column-two-container.visible {
+    display: block;
+  }
+}
+
+.menuButton {
+  background-color: var(--column-background-color);
+  padding: 5px 10px;
+  /* Adjust padding as needed */
+  text-align: center;
+  border: 1px solid var(--column-border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: inline-block;
+  margin: 10px 0;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.menuButton:hover {
+  background-color: var(--column-border-color);
+  color: var(--column-background-color);
+}
+
+@media (max-width: 768px) {
+  .app {
+    overflow-y: auto;
+    /* Make the app scrollable on small screens */
+  }
+
+  .columns {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .column {
+    height: auto;
+    /* Adjust height for small screens */
+  }
+
+  .column3 {
+    height: auto;
+    /* Adjust height for small screens */
+  }
 }

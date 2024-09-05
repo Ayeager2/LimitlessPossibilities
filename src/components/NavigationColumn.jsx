@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaChevronDown, FaChevronUp, FaCog } from 'react-icons/fa';
 
 const NavigationColumn = ({ items, toggleSettings, darkMode }) => {
