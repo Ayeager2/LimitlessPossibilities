@@ -1,7 +1,7 @@
 // AppContent.jsx
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleDarkMode, changeBackgroundColor, resetColors, clearLocalStorage, hideColumn3, toggleSettings, toggleColumnTwo } from './settingsSlice';
+import { loadSettings, toggleDarkMode, changeBackgroundColor, resetColors, clearLocalStorage, hideColumn3, toggleSettings, toggleColumnTwo } from './settingsSlice';
 import './App.css';
 import TitleRow from './components/TitleRow';
 import Column from './components/Column';
@@ -16,6 +16,10 @@ const AppContent = () => {
   const { backgroundColor, showColumn3, showSettings, isColumnTwoVisible } = useSelector((state) => state.settings);
   const isSmallScreen = useScreenSize();
   const colorPickerRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(loadSettings());
+  }, [dispatch]);
 
   return (
     <div className="app">
