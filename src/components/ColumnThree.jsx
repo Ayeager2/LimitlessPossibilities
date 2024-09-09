@@ -1,12 +1,13 @@
-import React from 'react';
-import { FaRegWindowClose } from "react-icons/fa"; 
 import Settings from './Settings';
+import { useSelector } from 'react-redux';
+const ColumnThree = () => {
+  const {showSettings} = useSelector((state) => state.settings);
 
-const ColumnThree = ({ hideColumn3, showSettings, settingsProps }) => (
-  <div className="column3">
-    <FaRegWindowClose onClick={hideColumn3} />
-    {showSettings && <Settings {...settingsProps} />}
-  </div>
-);
+  return (
+    <div className="column3">      
+      {showSettings && <Settings/>}
+    </div>
+  );
+};
 
 export default ColumnThree;

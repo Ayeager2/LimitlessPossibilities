@@ -1,4 +1,7 @@
-import { useRef, useState } from 'react';
+// AppContent.jsx
+import { useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleDarkMode, changeBackgroundColor, resetColors, clearLocalStorage, hideColumn3, toggleSettings, toggleColumnTwo } from './settingsSlice';
 import './App.css';
 import TitleRow from './components/TitleRow';
 import Column from './components/Column';
@@ -6,62 +9,42 @@ import NavigationColumn from './components/NavigationColumn';
 import ColumnTwoButton from './components/ColumnTwoButton';
 import ColumnThree from './components/ColumnThree';
 import { useScreenSize } from './useScreenSize';
-import { SettingsProvider, useSettingsContext } from './SettingsContext';
 import navItems from './components/data';
 
 const AppContent = () => {
-  const { darkMode, backgroundColor, toggleDarkMode, handleColorChange, resetColors, clearLocalStorage } = useSettingsContext();
-  const [showColumn3, setShowColumn3] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [isColumnTwoVisible, setIsColumnTwoVisible] = useState(false);
+  const dispatch = useDispatch();
+  const { backgroundColor, showColumn3, showSettings, isColumnTwoVisible } = useSelector((state) => state.settings);
   const isSmallScreen = useScreenSize();
-
-  const toggleColumn3 = () => {
-    setShowColumn3(!showColumn3);
-  };
-
-  const hideColumn3 = () => {
-    setShowColumn3(false);
-    setShowSettings(false);
-  };
-
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
-    setShowColumn3(true);
-  };
-
-  const toggleColumnTwo = () => {
-    setIsColumnTwoVisible(!isColumnTwoVisible);
-  };
+  const colorPickerRef = useRef(null);
 
   return (
     <div className="app">
       <div className="landing-page">
-        <TitleRow hideColumn3={hideColumn3} />
+        <TitleRow hideColumn3={() => dispatch(hideColumn3())} />
         <div className={`columns ${showColumn3 ? 'show-column3' : ''}`}>
           {isSmallScreen ? (
             <>
-              <ColumnTwoButton toggleColumnTwo={toggleColumnTwo} />
+              <ColumnTwoButton toggleColumnTwo={() => dispatch(toggleColumnTwo())} />
               {isColumnTwoVisible && (
-                <NavigationColumn items={navItems} toggleSettings={toggleSettings} />
+                <NavigationColumn items={navItems} toggleSettings={() => dispatch(toggleSettings())} />
               )}
             </>
           ) : (
-            <NavigationColumn items={navItems} toggleSettings={toggleSettings} />
+            <NavigationColumn items={navItems} toggleSettings={() => dispatch(toggleSettings())} />
           )}
           <Column>Column 2</Column>
           <ColumnThree
-            hideColumn3={hideColumn3}
+            hideColumn3={() => dispatch(hideColumn3())}
             showSettings={showSettings}
             settingsProps={{
-              toggleDarkMode,
-              toggleColumn3,
+              toggleDarkMode: () => dispatch(toggleDarkMode()),
+              toggleColumn3: () => dispatch(toggleSettings()),
               changeBackgroundColor: () => colorPickerRef.current.click(),
-              resetColors,
-              clearLocalStorage,
-              colorPickerRef: useRef(null),
+              resetColors: () => dispatch(resetColors()),
+              clearLocalStorage: () => dispatch(clearLocalStorage()),
+              colorPickerRef,
               backgroundColor,
-              handleColorChange,
+              handleColorChange: (e) => dispatch(changeBackgroundColor(e.target.value)),
             }}
           />
         </div>
@@ -70,10 +53,4 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <SettingsProvider>
-    <AppContent />
-  </SettingsProvider>
-);
-
-export default App;
+export default AppContent;
